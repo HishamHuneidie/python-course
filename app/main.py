@@ -4,6 +4,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
+    print('Hola mundo en consola')
+    print(123)
     return 'Hola desde Docker con Python 🚀'
 
 if __name__ == '__main__':
