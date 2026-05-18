@@ -1,88 +1,88 @@
 import sys
 from pathlib import Path
-from random import shuffle
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from methods.color import color
 from methods.printer import title
 
-# Day 05 - The hangman
-
-# Methods
-
-title('Methods')
-
-coffee_list = [
-    ('Capuccino', 2.50),
-    ('American', 3),
-    ('Latte', 1.50),
-]
-
-def coffee_most_expensive(list):
-    """
-    This is my first method
-    """
-    max_name, max_price = [None, 0]
-    for coffe_name, price in list:
-        if price > max_price:
-            max_name, max_price = coffe_name, price
-
-    return (max_name, max_price)
-
-expensive_coffe = coffee_most_expensive(coffee_list)
-
-print(f"The most expensive coffee is {expensive_coffe[0]} and the price is {expensive_coffe[1]}")
+filename = './fixtures/open-file.txt'
+absolute_filename = '/app/fixtures/open-file.txt'
+file = open(filename)
+original_content = file.read()
+file.close()
 
 
-# First play
-
-title('First play')
-
-# Initial list
-tubes = ['-', '--', '---', '----']
-
-# Mix tubes
-def mix_list(list):
-    shuffle(list)
-    return list
-
-# Ask user to choose
-def ask_number():
-    attempt = ''
-
-    while attempt not in ['1', '2', '3', '4']:
-        attempt = input('Choose a number between 1 and 4: ')
-
-    return int(attempt)
-
-# Verify the user's attempt
-def verify_attempt(list, user_number):
-    selection = list[user_number - 1]
-
-    if selection == '-':
-        print(color('You lost!', 'red'))
-        pass
-    else:
-        print(color('You won!', 'cyan'))
-        pass
-
-    print(f'You got the "{selection}"')
-
-mixed_tubes = mix_list(tubes)
-user_number = ask_number()
-verify_attempt(mixed_tubes, user_number)
+def finish():
+    file = open(filename, 'w')
+    file.write(original_content)
+    file.close()
 
 
-# Variadic operator and argument unpacking
+# Day 06 - Recipe book
 
-title('Variadic operator and argument unpacking')
+# Read files
 
+title('Read files')
+
+file = open(filename)
+print(color('open("my-file")', 'magenta'))
+print(file)
+print()
+print(color('file.read()', 'magenta'))
+print(file.read())
+file.close()
+
+file = open(filename)
+print()
+print(color('file.readline()', 'magenta'), file.readline().strip())
+print(color('file.readline()', 'magenta'), file.readline().strip())
+print(color('file.readline()', 'magenta'), file.readline().strip())
+file.close()
+
+file = open(filename)
+print()
 print(color("""
-Variadic operator:  func method(...$args) → def method(*args)
-Argument unpacking: method(...$args)      → method(*args)
+for line in file:
+    print(line)
+""".strip(), 'magenta'))
+for line in file:
+    print(line.strip())
+file.close()
 
-kwargs → def method(**dictionary)
-       → method(k1=v1, k2=v2)
-       → method(**dictionary)
-""", 'magenta'))
+file = open(filename)
+print()
+print(color('file.readlines()', 'magenta'), file.readlines())
+file.close()
+
+print()
+print(color('Opening methods:', 'magenta'))
+print('- ', color('r:', 'magenta'), 'Just read the file. If not exists, then error.')
+print('- ', color('w:', 'magenta'),
+      'Just write the file. If not exists, then it is created. If exists, then its content is replaced.')
+print('- ', color('a:', 'magenta'),
+      'Add text to the file. If not exists, then it is created. If exists, then it adds more lines.')
+
+file = open(filename, 'a')
+file.write('New line')
+file.writelines(['New line', 'Second line', 'third line'])
+file.close()
+
+file = open(absolute_filename, 'r')
+print()
+print(color('Open file with an absolute path', 'magenta'))
+print(file.read())
+file.close()
+
+my_folder = Path('/app/fixtures')
+file_path = my_folder / 'open-file.txt'
+file = open(file_path, 'r')
+print()
+print(type(file_path))
+print(color('open(Path(), "r")', 'magenta'), file.readline())
+file.close()
+
+print(color('system("clear")', 'magenta'), 'It cleans the terminal')
+
+finish()
+# file.close()

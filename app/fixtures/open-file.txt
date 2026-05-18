@@ -1,0 +1,3 @@
+First line of an open file
+Second line of an open file
+Third line of an open file
