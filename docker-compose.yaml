@@ -3,8 +3,19 @@ services:
     build:
       context: .
       dockerfile: .docker/app/Dockerfile
+    environment:
+      DISPLAY: ${DISPLAY:-:0}
+      SDL_AUDIODRIVER: pulseaudio
+      SDL_VIDEODRIVER: x11
+      SDL_VIDEO_WINDOW_POS: 100,100
+      WAYLAND_DISPLAY: ${WAYLAND_DISPLAY:-wayland-0}
+      XDG_RUNTIME_DIR: /tmp/wslg-runtime
+      PULSE_SERVER: unix:/mnt/wslg/PulseServer
     ports:
       - "5000:5000"
     volumes:
       - ./app:/app
+      - /mnt/wslg/.X11-unix:/tmp/.X11-unix
+      - /mnt/wslg/runtime-dir:/tmp/wslg-runtime
+      - /mnt/wslg/PulseServer:/mnt/wslg/PulseServer
     restart: always
