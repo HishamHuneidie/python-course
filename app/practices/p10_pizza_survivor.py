@@ -40,7 +40,6 @@ bg_path = m.complete_path('fondo.png')
 icon = pygame.image.load(icon_path)
 bg = pygame.image.load(bg_path)
 bg = pygame.transform.scale(bg, game_config['scree_size'])
-vulnerability_interval = 5000
 
 # Sound fixtures
 pygame.mixer.music.load(m.complete_path('bg.mp3'))

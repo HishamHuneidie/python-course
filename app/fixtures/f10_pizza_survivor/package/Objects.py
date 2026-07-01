@@ -73,8 +73,13 @@ class GameObject:
 
 
 class MovableGameObject(GameObject):
-    def __init__(self, coordinates: tuple[int | float, int | float], image_path, size: tuple[int | float, int | float],
-                 speed: int | float):
+    def __init__(
+        self,
+        coordinates: tuple[int | float, int | float],
+        image_path,
+        size: tuple[int | float, int | float],
+        speed: int | float,
+    ):
         super().__init__(coordinates, image_path, size)
         self.speed = speed
 
@@ -108,6 +113,14 @@ class MovableGameObject(GameObject):
 
 
 class Enemy(MovableGameObject):
+    image_path = None
+    size: tuple[int | float, int | float] = None
+    speed: int | float = None
+
+    def __init__(self, coordinates: tuple[int | float, int | float]):
+        super().__init__(coordinates, self.image_path, self.size, self.speed)
+
+
     def run(self):
         distance = self.calculate_distance(game_config['deliver'])
 
@@ -142,6 +155,18 @@ class Enemy(MovableGameObject):
         return enemy_rect.colliderect(deliver_rect)
 
 
+class Grinch(Enemy):
+    image_path = m.complete_path('grinch.png')
+    size: tuple[int | float, int | float] = (100, 100)
+    speed: int | float = 0.5
+
+
+class Dog(Enemy):
+    image_path = m.complete_path('dog.png')
+    size: tuple[int | float, int | float] = (70, 70)
+    speed: int | float = 1
+
+
 class EnemyFather:
     def __init__(self):
         self.children: list[Enemy] = []
@@ -160,12 +185,11 @@ class EnemyFather:
 
         position = choice(list(positions.values()))
 
-        new_enemy = Enemy(
-            coordinates=position,
-            image_path=m.complete_path('enemy.png'),
-            size=(100, 100),
-            speed=0.5,
-        )
+        temp_enemies = [
+            Grinch(position),
+            Dog(position),
+        ]
+        new_enemy = choice(temp_enemies)
 
         self.children.append(new_enemy)
         self.last_enemy_birth = pygame.time.get_ticks()
