@@ -1,4 +1,6 @@
 from random import randint, choice
+from typing import final
+from abc import ABC
 
 import pygame
 from pygame.key import ScancodeWrapper
@@ -112,12 +114,16 @@ class MovableGameObject(GameObject):
         self.limite()
 
 
-class Enemy(MovableGameObject):
+class Enemy(ABC, MovableGameObject):
     image_path = None
     size: tuple[int | float, int | float] = None
     speed: int | float = None
 
     def __init__(self, coordinates: tuple[int | float, int | float]):
+        if type(self) is Enemy:
+            raise TypeError('Class Enemy cannot be instantiated directly')
+
+
         super().__init__(coordinates, self.image_path, self.size, self.speed)
 
 
@@ -138,6 +144,7 @@ class Enemy(MovableGameObject):
         if self.has_hit():
             game_config['deliver'].is_shot()
 
+
     def has_hit(self) -> bool:
         enemy_rect = pygame.Rect(
             self.coordinates[0],
@@ -155,12 +162,14 @@ class Enemy(MovableGameObject):
         return enemy_rect.colliderect(deliver_rect)
 
 
+@final
 class Grinch(Enemy):
     image_path = m.complete_path('grinch.png')
     size: tuple[int | float, int | float] = (100, 100)
     speed: int | float = 0.5
 
 
+@final
 class Dog(Enemy):
     image_path = m.complete_path('dog.png')
     size: tuple[int | float, int | float] = (70, 70)
